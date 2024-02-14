@@ -80,7 +80,6 @@ function App() {
       const querySnapshot = await getDocs(queryData);
 
       querySnapshot.forEach((doc) => {
-        console.log(`${doc.id} => ${doc.data()}`);
         data.push(doc.data());
       });
 
