@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
@@ -9,9 +9,9 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Collapse from "@mui/material/Collapse";
-
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
+import { useReactToPrint } from "react-to-print";
 
 export default function Dashboard({ addVehicle, vehicleData }) {
   const [showSuccess, setShowSuccess] = useState(false);
@@ -50,40 +50,56 @@ export default function Dashboard({ addVehicle, vehicleData }) {
         vehicleData={vehicleData}
         setShowSuccess={setShowSuccess}
       />
+
       <VehicleList data={vehicleData} />
     </>
   );
 }
 
-function VehicleList({ data }) {
+export function VehicleList({ data }) {
+  const pdfRef = useRef();
+  const pdfdownloader = useReactToPrint({
+    content: () => pdfRef.current,
+  });
   return (
     <>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Visitor Unit</th>
-            <th scope="col">Visitor Name</th>
-            <th scope="col">From</th>
-            <th scope="col">To</th>
-            <th scope="col">Vehicle Make</th>
-            <th scope="col">Vehicle Color</th>
-            <th scope="col">License Plate</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((dat) => (
-            <tr key={Math.random()}>
-              <td>{dat.visitingUnit}</td>
-              <td>{dat.visitorName}</td>
-              <td>{new Date(dat.from).toLocaleString()}</td>
-              <td>{new Date(dat.to).toLocaleString()}</td>
-              <td>{dat.vehicleMake}</td>
-              <td>{dat.vehicleColor}</td>
-              <td>{dat.licensePlate}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {data.length > 0 ? (
+        <>
+          <button onClick={pdfdownloader} className="btn btn-dark">
+            Download Data
+          </button>
+          <div ref={pdfRef}>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th scope="col">Visiting Unit</th>
+                  <th scope="col">Visitor Name</th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                  <th scope="col">Vehicle Make</th>
+                  <th scope="col">Vehicle Color</th>
+                  <th scope="col">License Plate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((dat) => (
+                  <tr key={Math.random()}>
+                    <td>{dat.visitingUnit}</td>
+                    <td>{dat.visitorName}</td>
+                    <td>{new Date(dat.from).toLocaleString()}</td>
+                    <td>{new Date(dat.to).toLocaleString()}</td>
+                    <td>{dat.vehicleMake}</td>
+                    <td>{dat.vehicleColor}</td>
+                    <td>{dat.licensePlate}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </>
+      ) : (
+        <div>No Record</div>
+      )}
     </>
   );
 }
@@ -178,9 +194,9 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
             Issue Parking Pass
           </button>
 
-          <button onClick={exportToExcel} className="btn btn-dark">
+          {/* <button onClick={exportToExcel} className="btn btn-dark">
             Download Data
-          </button>
+          </button> */}
         </div>
       </div>
 

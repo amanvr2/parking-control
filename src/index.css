@@ -16,5 +16,17 @@ code {
   display: flex;
   width: 100%;
   justify-content: space-evenly;
-  margin-bottom: 50px;
+  margin-bottom: 20px;
+}
+
+#report {
+  width: 100%;
+}
+
+#report > table > thead > tr > th {
+  font-size: 5px;
+}
+
+#report > table > tbody > tr > td {
+  font-size: 5px;
 }
