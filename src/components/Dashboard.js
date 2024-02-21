@@ -9,8 +9,8 @@ import Alert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
 import Collapse from "@mui/material/Collapse";
-import * as XLSX from "xlsx";
-import { saveAs } from "file-saver";
+// import * as XLSX from "xlsx";
+// import { saveAs } from "file-saver";
 import { useReactToPrint } from "react-to-print";
 
 export default function Dashboard({ addVehicle, vehicleData }) {
@@ -136,51 +136,51 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
     setShowSuccess(true);
     addVehicle(vehicle);
   }
-  const exportToExcel = () => {
-    // Convert array of objects to array of arrays
-    const dataArray = vehicleData.map((item) => [
-      item.visitingUnit,
-      item.visitorName,
-      new Date(item.from).toLocaleString(),
-      new Date(item.to).toLocaleString(),
-      item.vehicleMake,
-      item.vehicleColor,
-      item.comments,
-      item.province,
-      item.licensePlate,
-    ]);
+  // const exportToExcel = () => {
+  //   // Convert array of objects to array of arrays
+  //   const dataArray = vehicleData.map((item) => [
+  //     item.visitingUnit,
+  //     item.visitorName,
+  //     new Date(item.from).toLocaleString(),
+  //     new Date(item.to).toLocaleString(),
+  //     item.vehicleMake,
+  //     item.vehicleColor,
+  //     item.comments,
+  //     item.province,
+  //     item.licensePlate,
+  //   ]);
 
-    // Create a worksheet
-    const ws = XLSX.utils.aoa_to_sheet([
-      [
-        "Visiting Unit",
-        "Visitor Name",
-        "From",
-        "To",
-        "Vehicle Make",
-        "Vehicle Color",
-        "Comments",
-        "Province",
-        "License Plate",
-      ],
-      ...dataArray,
-    ]);
+  //   // Create a worksheet
+  //   const ws = XLSX.utils.aoa_to_sheet([
+  //     [
+  //       "Visiting Unit",
+  //       "Visitor Name",
+  //       "From",
+  //       "To",
+  //       "Vehicle Make",
+  //       "Vehicle Color",
+  //       "Comments",
+  //       "Province",
+  //       "License Plate",
+  //     ],
+  //     ...dataArray,
+  //   ]);
 
-    // Create a workbook
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
+  //   // Create a workbook
+  //   const wb = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(wb, ws, "Sheet 1");
 
-    // Convert the workbook to a binary Excel file (XLSX)
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
+  //   // Convert the workbook to a binary Excel file (XLSX)
+  //   const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
 
-    // Convert the array buffer to a blob
-    const blob = new Blob([excelBuffer], {
-      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    });
+  //   // Convert the array buffer to a blob
+  //   const blob = new Blob([excelBuffer], {
+  //     type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  //   });
 
-    // Save the blob as a file using FileSaver
-    saveAs(blob, "exportedData.xlsx");
-  };
+  //   // Save the blob as a file using FileSaver
+  //   saveAs(blob, "exportedData.xlsx");
+  // };
 
   return (
     <>
