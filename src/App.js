@@ -58,8 +58,6 @@ function App() {
       var lastSaturday = new Date(today);
       lastSaturday.setDate(today.getDate() - daysToSubtract);
 
-      // Output the last Saturday's date
-      console.log(lastSaturday.getTime());
       setLastSaturday(lastSaturday.getTime());
     }
 
@@ -71,7 +69,6 @@ function App() {
   useEffect(() => {
     const data = [];
     async function getVehicles() {
-      
       const vehicleRef = collection(firestore, "vehicles");
       const queryData = query(
         vehicleRef,
