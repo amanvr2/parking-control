@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import dayjs from "dayjs";
@@ -18,31 +18,29 @@ export default function Dashboard({ addVehicle, vehicleData }) {
 
   return (
     <>
-     
-        <div className="visitorAddedMsg">
-          <Box sx={{ width: "30%", marginLeft:"35px" }}>
-            <Collapse in={openAlert}>
-              <Alert
-                action={
-                  <IconButton
-                    aria-label="close"
-                    color="inherit"
-                    size="small"
-                    onClick={() => {
-                      setOpenAlert(false);
-                    }}
-                  >
-                    <CloseIcon fontSize="inherit" />
-                  </IconButton>
-                }
-                sx={{ mb: 2 }}
-              >
-                Visitor added
-              </Alert>
-            </Collapse>
-          </Box>
-        </div>
-  
+      <div className="visitorAddedMsg">
+        <Box sx={{ width: "30%", marginLeft: "35px" }}>
+          <Collapse in={openAlert}>
+            <Alert
+              action={
+                <IconButton
+                  aria-label="close"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    setOpenAlert(false);
+                  }}
+                >
+                  <CloseIcon fontSize="inherit" />
+                </IconButton>
+              }
+              sx={{ mb: 2 }}
+            >
+              Visitor added
+            </Alert>
+          </Collapse>
+        </Box>
+      </div>
 
       <VehicleList
         data={vehicleData}
@@ -55,9 +53,17 @@ export default function Dashboard({ addVehicle, vehicleData }) {
 
 export function VehicleList({ data, addVehicle, setShowSuccess }) {
   const pdfRef = useRef();
+  const [show, setShow] = useState(true);
+  const [loading, setLoading] = useState(true); // Initialize loading state
   const pdfdownloader = useReactToPrint({
     content: () => pdfRef.current,
   });
+
+  useEffect(() => {
+    setLoading(false);
+    setShow(data.length > 0);
+  }, [data]);
+
   return (
     <>
       <div className="buttons-main">
@@ -67,47 +73,51 @@ export function VehicleList({ data, addVehicle, setShowSuccess }) {
           setShowSuccess={setShowSuccess}
         />
 
-        {data.length > 0 && <button
-          onClick={pdfdownloader}
-          className="btn btn-dark downloadDataBtn"
-        >
-          Download Data
-        </button>}
-
+        {show && (
+          <button
+            onClick={pdfdownloader}
+            className="btn btn-dark downloadDataBtn"
+          >
+            Download Data
+          </button>
+        )}
       </div>
-      {data.length > 0 ? (
+
+      {!loading && (
         <>
-          <div ref={pdfRef} className="vehcileTable">
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Visiting Unit</th>
-                  <th scope="col">Visitor Name</th>
-                  <th scope="col">From</th>
-                  <th scope="col">To</th>
-                  <th scope="col">Vehicle Make</th>
-                  <th scope="col">Vehicle Color</th>
-                  <th scope="col">License Plate</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((dat) => (
-                  <tr key={Math.random()}>
-                    <td>{dat.visitingUnit}</td>
-                    <td>{dat.visitorName}</td>
-                    <td>{new Date(dat.from).toLocaleString()}</td>
-                    <td>{new Date(dat.to).toLocaleString()}</td>
-                    <td>{dat.vehicleMake}</td>
-                    <td>{dat.vehicleColor}</td>
-                    <td>{dat.licensePlate}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {show ? (
+            <>
+              <div ref={pdfRef} className="vehcileTable">
+                <table className="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Visiting Unit</th>
+                      <th scope="col">Visitor Name</th>
+                      <th scope="col">From</th>
+                      <th scope="col">To</th>
+                      <th scope="col">Vehicle Make</th>
+                      <th scope="col">Vehicle Color</th>
+                      <th scope="col">License Plate</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {data.map((dat) => (
+                      <tr key={Math.random()}>
+                        <td>{dat.visitingUnit}</td>
+                        <td>{dat.visitorName}</td>
+                        <td>{new Date(dat.from).toLocaleString()}</td>
+                        <td>{new Date(dat.to).toLocaleString()}</td>
+                        <td>{dat.vehicleMake}</td>
+                        <td>{dat.vehicleColor}</td>
+                        <td>{dat.licensePlate}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          ): ( <div className="noRecords">No Record</div>)}
         </>
-      ) : (
-        <div className="noRecords">No Record</div>
       )}
     </>
   );
