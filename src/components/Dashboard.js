@@ -19,7 +19,7 @@ export default function Dashboard({ addVehicle, vehicleData }) {
   return (
     <>
      
-        <div>
+        <div className="visitorAddedMsg">
           <Box sx={{ width: "30%", marginLeft:"35px" }}>
             <Collapse in={openAlert}>
               <Alert

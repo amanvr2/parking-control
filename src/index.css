@@ -79,3 +79,8 @@ code {
 .noRecords{
   margin-top: 100px;
 }
+
+.visitorAddedMsg{
+  display: flex;
+  justify-content: center;
+}
