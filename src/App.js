@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./App.css";
 import Dashboard from "./components/Dashboard";
+import Header from "./components/Header";
 import { firestore } from "./Firebase";
 import {
   collection,
@@ -10,7 +11,7 @@ import {
   orderBy,
   where,
 } from "firebase/firestore";
-
+ 
 function App() {
   const [vehicle, setVehicle] = useState(null);
   const [vehicleList, setVehicleList] = useState([]);
@@ -19,7 +20,7 @@ function App() {
   function addVehicle(vehicle) {
     if (vehicle.to > lastSaturday) {
       setVehicle(vehicle);
-      setVehicleList((prev) => [vehicle, ...prev]);
+      setVehicleList((prev) => [...prev, vehicle]);
     }
   }
 
@@ -70,7 +71,7 @@ function App() {
   useEffect(() => {
     const data = [];
     async function getVehicles() {
-      console.log(lastSaturday);
+      
       const vehicleRef = collection(firestore, "vehicles");
       const queryData = query(
         vehicleRef,
@@ -93,6 +94,7 @@ function App() {
 
   return (
     <div className="App">
+      <Header/>
       <Dashboard addVehicle={addVehicle} vehicleData={vehicleList} />
     </div>
   );

@@ -14,14 +14,13 @@ import Collapse from "@mui/material/Collapse";
 import { useReactToPrint } from "react-to-print";
 
 export default function Dashboard({ addVehicle, vehicleData }) {
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [openAlert, setOpenAlert] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
 
   return (
     <>
-      {showSuccess && (
+     
         <div>
-          <Box sx={{ width: "100%" }}>
+          <Box sx={{ width: "30%", marginLeft:"35px" }}>
             <Collapse in={openAlert}>
               <Alert
                 action={
@@ -43,32 +42,42 @@ export default function Dashboard({ addVehicle, vehicleData }) {
             </Collapse>
           </Box>
         </div>
-      )}
+  
 
-      <AddModal
+      <VehicleList
+        data={vehicleData}
         addVehicle={addVehicle}
-        vehicleData={vehicleData}
-        setShowSuccess={setShowSuccess}
+        setShowSuccess={setOpenAlert}
       />
-
-      <VehicleList data={vehicleData} />
     </>
   );
 }
 
-export function VehicleList({ data }) {
+export function VehicleList({ data, addVehicle, setShowSuccess }) {
   const pdfRef = useRef();
   const pdfdownloader = useReactToPrint({
     content: () => pdfRef.current,
   });
   return (
     <>
+      <div className="buttons-main">
+        <AddModal
+          addVehicle={addVehicle}
+          vehicleData={data}
+          setShowSuccess={setShowSuccess}
+        />
+
+        {data.length > 0 && <button
+          onClick={pdfdownloader}
+          className="btn btn-dark downloadDataBtn"
+        >
+          Download Data
+        </button>}
+
+      </div>
       {data.length > 0 ? (
         <>
-          <button onClick={pdfdownloader} className="btn btn-dark">
-            Download Data
-          </button>
-          <div ref={pdfRef}>
+          <div ref={pdfRef} className="vehcileTable">
             <table className="table table-striped">
               <thead>
                 <tr>
@@ -98,7 +107,7 @@ export function VehicleList({ data }) {
           </div>
         </>
       ) : (
-        <div>No Record</div>
+        <div className="noRecords">No Record</div>
       )}
     </>
   );
@@ -118,7 +127,6 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    console.log(from.toDate().getTime());
 
     const vehicle = {
       visitingUnit: visitingUnit,
@@ -184,20 +192,18 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
 
   return (
     <>
-      <div className="main">
-        <div className="buttons">
-          <button
-            type="button"
-            className="btn btn-dark"
-            onClick={() => setShowModal(true)}
-          >
-            Issue Parking Pass
-          </button>
+      <div className="buttons">
+        <button
+          type="button"
+          className="btn btn-dark issueParkingBtn"
+          onClick={() => setShowModal(true)}
+        >
+          Issue Parking Pass
+        </button>
 
-          {/* <button onClick={exportToExcel} className="btn btn-dark">
-            Download Data
-          </button> */}
-        </div>
+        {/* <button onClick={exportToExcel} className="btn btn-dark">
+          Download Data
+        </button> */}
       </div>
 
       {showModal && (
