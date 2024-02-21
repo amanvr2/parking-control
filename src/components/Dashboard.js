@@ -116,7 +116,7 @@ export function VehicleList({ data, addVehicle, setShowSuccess }) {
                 </table>
               </div>
             </>
-          ): ( <div className="noRecords">No Record</div>)}
+          ): ( <div className="noRecords">No record for current week</div>)}
         </>
       )}
     </>
