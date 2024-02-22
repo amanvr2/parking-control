@@ -11,11 +11,13 @@ import {
   orderBy,
   where,
 } from "firebase/firestore";
- 
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+
 function App() {
   const [vehicle, setVehicle] = useState(null);
   const [vehicleList, setVehicleList] = useState([]);
   const [lastSaturday, setLastSaturday] = useState(null);
+  const [user, setUser] = useState(null)
 
   function addVehicle(vehicle) {
     if (vehicle.to > lastSaturday) {
@@ -43,6 +45,8 @@ function App() {
     fetchData();
   }, [vehicle]);
 
+  //get last saturday
+
   useEffect(() => {
     async function getLastSaturday() {
       // Get today's date
@@ -64,11 +68,34 @@ function App() {
     getLastSaturday();
   }, []);
 
+  // Auth
+
+  useEffect(()=>{
+
+    const email = "amanvr2@gmail.com";
+    const password = "Canadianvr2@";
+
+    const auth = getAuth();
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        // Signed in 
+        const us = userCredential.user;
+        setUser(us);
+      })
+      .catch((error) => {
+      
+        console.log(error.message);
+      });
+
+
+  },[])
+
   // fetch
 
   useEffect(() => {
-    const data = [];
+    
     async function getVehicles() {
+      const data = [];
       const vehicleRef = collection(firestore, "vehicles");
       const queryData = query(
         vehicleRef,
@@ -84,14 +111,15 @@ function App() {
       setVehicleList(data);
     }
 
-    if (lastSaturday !== null) {
+    if(user){
       getVehicles();
     }
-  }, [lastSaturday]);
+
+  }, [lastSaturday, user]);
 
   return (
     <div className="App">
-      <Header/>
+      <Header />
       <Dashboard addVehicle={addVehicle} vehicleData={vehicleList} />
     </div>
   );
