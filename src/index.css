@@ -84,3 +84,7 @@ code {
   display: flex;
   justify-content: center;
 }
+
+.comment{
+  max-width: 300px;
+}
