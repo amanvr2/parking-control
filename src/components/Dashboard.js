@@ -165,6 +165,14 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
     setLicensePlate("")
     setShowModal("")
   }
+
+  function updateDateTime(){
+
+    setShowModal(true);
+    setFrom(dayjs(new Date()));
+    setTo(dayjs(new Date()))
+
+  }
   // const exportToExcel = () => {
   //   // Convert array of objects to array of arrays
   //   const dataArray = vehicleData.map((item) => [
@@ -217,7 +225,7 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
         <button
           type="button"
           className="btn btn-dark issueParkingBtn"
-          onClick={() => setShowModal(true)}
+          onClick={() => updateDateTime()}
         >
           Issue Parking Pass
         </button>
