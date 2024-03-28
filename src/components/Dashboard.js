@@ -13,7 +13,7 @@ import Collapse from "@mui/material/Collapse";
 // import { saveAs } from "file-saver";
 import { useReactToPrint } from "react-to-print";
 
-export default function Dashboard({ addVehicle, vehicleData }) {
+export default function Dashboard({ addVehicle, vehicleData, isLoading }) {
   const [openAlert, setOpenAlert] = useState(false);
 
   return (
@@ -46,14 +46,15 @@ export default function Dashboard({ addVehicle, vehicleData }) {
         data={vehicleData}
         addVehicle={addVehicle}
         setShowSuccess={setOpenAlert}
+        isLoading={isLoading}
       />
     </>
   );
 }
 
-export function VehicleList({ data, addVehicle, setShowSuccess }) {
+export function VehicleList({ data, addVehicle, setShowSuccess, isLoading }) {
   const pdfRef = useRef();
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(false);
   const pdfdownloader = useReactToPrint({
     content: () => pdfRef.current,
   });
@@ -71,7 +72,7 @@ export function VehicleList({ data, addVehicle, setShowSuccess }) {
           setShowSuccess={setShowSuccess}
         />
 
-        {show && (
+        {show && !isLoading && (
           <button
             onClick={pdfdownloader}
             className="btn btn-dark downloadDataBtn"
@@ -80,8 +81,48 @@ export function VehicleList({ data, addVehicle, setShowSuccess }) {
           </button>
         )}
       </div>
- 
-      {show ? (
+
+      {isLoading && !show && <div>Loading ...</div>}
+
+
+      {/* {!isLoading && (
+        <>
+          {show && (
+            <div ref={pdfRef} className="vehcileTable">
+              <table className="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Visiting Unit</th>
+                    <th scope="col">Visitor Name</th>
+                    <th scope="col">From</th>
+                    <th scope="col">To</th>
+                    <th scope="col">Vehicle Make</th>
+                    <th scope="col">Vehicle Color</th>
+                    <th scope="col">License Plate</th>
+                    <th scope="col">Comment (If any)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.map((dat) => (
+                    <tr key={Math.random()}>
+                      <td>{dat.visitingUnit}</td>
+                      <td>{dat.visitorName}</td>
+                      <td>{new Date(dat.from).toLocaleString()}</td>
+                      <td>{new Date(dat.to).toLocaleString()}</td>
+                      <td>{dat.vehicleMake}</td>
+                      <td>{dat.vehicleColor}</td>
+                      <td>{dat.licensePlate}</td>
+                      <td className="comment">{dat.comments}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </>
+      )} */}
+
+      {!isLoading && show && (
         <>
           <div ref={pdfRef} className="vehcileTable">
             <table className="table table-striped">
@@ -114,9 +155,16 @@ export function VehicleList({ data, addVehicle, setShowSuccess }) {
             </table>
           </div>
         </>
-      ): ( <div className="noRecords">No record for current week</div>)}
+      )}
+
+      {!isLoading && show && <div className="noRecords">No record for current week</div>}
+
+
+
+
+
     </>
-  
+
   );
 }
 
@@ -134,7 +182,7 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    
+
     const vehicle = {
       visitingUnit: visitingUnit,
       visitorName: visitorName,
@@ -150,12 +198,12 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
     setShowModal(false);
     setShowSuccess(true);
     addVehicle(vehicle);
-    
-   
+
+
   }
 
-  function clearAll(){
-  
+  function clearAll() {
+
     setVisitingUnit("")
     setVisitorName("")
     setVehicleMake("")
@@ -166,7 +214,7 @@ function AddModal({ addVehicle, vehicleData, setShowSuccess }) {
     setShowModal("")
   }
 
-  function updateDateTime(){
+  function updateDateTime() {
 
     setShowModal(true);
     setFrom(dayjs(new Date()));
