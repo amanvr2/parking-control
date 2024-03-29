@@ -85,7 +85,7 @@ export function VehicleList({ data, addVehicle, setShowSuccess, isLoading }) {
       {isLoading && !show && <div>Loading ...</div>}
 
 
-      {/* {!isLoading && (
+      {!isLoading && (
         <>
           {show && (
             <div ref={pdfRef} className="vehcileTable">
@@ -120,48 +120,9 @@ export function VehicleList({ data, addVehicle, setShowSuccess, isLoading }) {
             </div>
           )}
         </>
-      )} */}
-
-      {!isLoading && show && (
-        <>
-          <div ref={pdfRef} className="vehcileTable">
-            <table className="table table-striped">
-              <thead>
-                <tr>
-                  <th scope="col">Visiting Unit</th>
-                  <th scope="col">Visitor Name</th>
-                  <th scope="col">From</th>
-                  <th scope="col">To</th>
-                  <th scope="col">Vehicle Make</th>
-                  <th scope="col">Vehicle Color</th>
-                  <th scope="col">License Plate</th>
-                  <th scope="col">Comment (If any)</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((dat) => (
-                  <tr key={Math.random()}>
-                    <td>{dat.visitingUnit}</td>
-                    <td>{dat.visitorName}</td>
-                    <td>{new Date(dat.from).toLocaleString()}</td>
-                    <td>{new Date(dat.to).toLocaleString()}</td>
-                    <td>{dat.vehicleMake}</td>
-                    <td>{dat.vehicleColor}</td>
-                    <td>{dat.licensePlate}</td>
-                    <td className="comment">{dat.comments}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
       )}
 
-      {!isLoading && show && <div className="noRecords">No record for current week</div>}
-
-
-
-
+      {!isLoading && !show && <div className="noRecords">No record for current week</div>}
 
     </>
 

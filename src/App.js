@@ -18,7 +18,7 @@ function App() {
   const [vehicleList, setVehicleList] = useState([]);
   const [lastSaturday, setLastSaturday] = useState(null);
   const [user, setUser] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   function addVehicle(vehicle) {
     if (vehicle.to > lastSaturday) {
@@ -96,7 +96,7 @@ function App() {
   useEffect(() => {
     
     async function getVehicles() {
-      setIsLoading(true)
+      setIsLoading(true);
       const data = [];
       const vehicleRef = collection(firestore, "vehicles");
       const queryData = query(
